@@ -11,13 +11,25 @@ public class Reimbursement {
     private LocalDateTime LocalDateTime;
     private Employee employee;
 
+    public Reimbursement(double reimbursementAmount, String reimbursementReason, Employee employee) {
+        this.reimbursementAmount = reimbursementAmount;
+        this.reimbursementReason = reimbursementReason;
+        this.reimbursementStatus = status;
+        this.employee = employee;
+    }
+
     public int getReimbursementID() { return reimbursementID; }
 
     public double getReimbursementAmount() { return reimbursementAmount; }
 
     public String getReimbursementReason() {  return reimbursementReason; }
 
-    public reimbursementStatus getStatus() { return status; }
+    public reimbursementStatus getStatus() {
+        if (this.status == null) {
+            this.status = reimbursementStatus.valueOf("PENDING");
+        }
+        return status;
+    }
 
     public java.time.LocalDateTime getLocalDateTime() { return LocalDateTime; }
 
@@ -25,7 +37,13 @@ public class Reimbursement {
 
     public void setReimbursementID(int reimbursementID) { this.reimbursementID = reimbursementID; }
 
-    public void setReimbursementAmount(double reimbursementAmount) { this.reimbursementAmount = reimbursementAmount; }
+    public void setReimbursementAmount(double reimbursementAmount) {
+        if (reimbursementAmount > 0) {
+            this.reimbursementAmount = reimbursementAmount;
+        } else {
+            this.reimbursementAmount = 0;
+        }
+    }
 
     public void setReimbursementReason(String reimbursementReason) { this.reimbursementReason = reimbursementReason; }
 
@@ -42,8 +60,7 @@ public class Reimbursement {
                 ", reimbursementAmount=" + reimbursementAmount +
                 ", reimbursementReason='" + reimbursementReason + '\'' +
                 ", status=" + status +
-                ", LocalDateTime=" + LocalDateTime +
-                ", employee=" + employee +
+                ", employee=" + employee.getEmployeeID() +
                 '}';
     }
 }

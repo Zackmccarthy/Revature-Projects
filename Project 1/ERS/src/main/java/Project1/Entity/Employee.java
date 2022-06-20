@@ -1,27 +1,93 @@
 package Project1.Entity;
 
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Employee  implements Comparable<Employee> {
     private String employeeID; // These entities will mark the columns in the database
     private String employeeFirstName, employeeLastName, employeeDob, employeeAddress, employeePhoneNum;
     private String employeeEmail, employeePass;
-
     private  employeeRole role;
 
-        public Employee(String employeeID, String employeeFirstName, String employeeLastName,String employeeDob, String employeeAddress, String employeePhoneNum, String employeeEmail, String employeePass, employeeRole role) {
-                this.employeeID = employeeID; // Constructor
-                this.employeeFirstName = employeeFirstName;
+        public Employee(String employeeFirstName, String employeeLastName, String employeeEmail, String role) {
+                this.employeeFirstName = employeeFirstName; //Constructor
                 this.employeeLastName = employeeLastName;
-                this.employeeDob = employeeDob;
-                this.employeeAddress = employeeAddress;
-                this.employeePhoneNum = employeePhoneNum;
                 this.employeeEmail = employeeEmail;
+                this.role = employeeRole.valueOf(role);
                 this.employeePass = RandomPassword.randomPassword();
         }
 
         public Employee() {
         }
+
+        public void viewEmployeeInfo(Employee emp) {
+            System.out.println("Employee ID#: " + emp.getEmployeeID());
+            System.out.println("Employee First Name: " + emp.getEmployeeFirstName());
+            System.out.println("Employee Last Name: " + emp.getEmployeeLastName());
+            System.out.println("Employee Date of Birth: " + emp.getEmployeeDob());
+            System.out.println("Employee Role: " + emp.getEmployeeRole().toString());
+            System.out.println("Employee Email: " + emp.getEmployeeEmail());
+            System.out.println("Employee Phone#: " + emp.getEmployeePhoneNum());
+            System.out.println("Employee Address: " + emp.getEmployeeAddress());
+        }
+
+    public void updateEmployeeInfo(String str, Employee emp){
+        Scanner s = new Scanner(System.in);
+        String input;
+        String[] perInfo= new String[] {"First Name","Last Name", "Date of Birth", "Email", "Phone#", "Address"};
+        String[] perInfoVal= new String[] {emp.getEmployeeFirstName(), emp.getEmployeeLastName(), emp.getEmployeeDob(), emp.getEmployeeEmail(), emp.getEmployeePhoneNum(), emp.getEmployeeAddress()};
+
+        if(str.equals("password")){
+            System.out.print("Would you like to update your password? ");
+            if(Cont().equals("y")){
+                System.out.print("Please enter your current password: ");
+                input=s.nextLine();
+                if(BCrypt.verifyer().verify(input.toCharArray(),emp.getEmployeePass()).verified){
+                    System.out.print("Please enter your new password:");
+                    input=s.nextLine();
+                    System.out.print("Please re-enter your new password:");
+                    String input2=s.nextLine();
+                    if(input.equals(input2)){
+                        String bcryptHashString = BCrypt.withDefaults().hashToString(12, input.toCharArray());
+                        emp.setEmployeePass(bcryptHashString);
+                    }else
+                        System.out.println("Password was not reset.");
+                }
+            }
+        } else {
+            for(int i=0; i<perInfo.length;i++){
+                System.out.println("Employee "+perInfo[i]+" : "+perInfoVal[i]);
+                System.out.print("Would you like to update your " + perInfo[i] + "? ");
+                if (Cont().equals("y")) {
+                    System.out.print("Please enter your " + perInfo[i] + ": ");
+                    input = s.nextLine();
+
+                    switch (perInfo[i]) {
+                        case "FirstName":
+                            emp.setEmployeeFirstName(input);
+                            break;
+                        case "LastName":
+                            emp.setEmployeeLastName(input);
+                            break;
+                        case "DateofBirth":
+                            emp.setEmployeeDob(input);
+                            break;
+                        case "Email":
+                            emp.setEmployeeEmail(input);
+                            break;
+                        case "Phone#":
+                            emp.setEmployeePhoneNum(input);
+                            break;
+                        case "Address":
+                            emp.setEmployeeAddress(input);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+    }
 
         public String getEmployeeID() {
                 return employeeID;
@@ -74,13 +140,15 @@ public class Employee  implements Comparable<Employee> {
 
     @Override
     public String toString() {
-        return "Reimbursement{" +
+        return "Employee{" +
                 "employeeID='" + employeeID + '\'' +
                 ", employeeFirstName='" + employeeFirstName + '\'' +
                 ", employeeLastName='" + employeeLastName + '\'' +
+                ", employeeDob='" + employeeDob + '\'' +
                 ", employeeAddress='" + employeeAddress + '\'' +
                 ", employeePhoneNum='" + employeePhoneNum + '\'' +
                 ", employeeEmail='" + employeeEmail + '\'' +
+                ", role=" + role +
                 '}';
     }
 

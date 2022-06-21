@@ -64,7 +64,7 @@
                 <version>2.2</version>
                 <configuration>
                     <port>8181</port>
-                    <path>Revature Projects</path>
+                    <path>/ERS</path>
                 </configuration>
             </plugin>
         </plugins>

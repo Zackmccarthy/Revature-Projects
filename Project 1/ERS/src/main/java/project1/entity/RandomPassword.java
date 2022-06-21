@@ -1,4 +1,4 @@
-package Project1.Entity;
+package project1.entity;
 
 public interface RandomPassword {
 
